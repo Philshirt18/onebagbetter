@@ -1,15 +1,26 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2937;
+  --primary-green: #84cc16;
+  --dark-overlay: rgba(0, 0, 0, 0.6);
+  --text-secondary: #6b7280;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary-green);
+  --color-lime-600: #84cc16;
+  --color-gray-800: #1f2937;
+  --color-gray-500: #6b7280;
+  --font-sans: system-ui, sans-serif;
+  --font-display: system-ui, sans-serif;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-adventure:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +33,145 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Adventure theme utilities */
+.hero-bg {
+  background-image:
+    linear-gradient(var(--dark-overlay), var(--dark-overlay)),
+    url('/rubbish-background.png?v=1');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pill-nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  box-shadow: var(--shadow-adventure);
+}
+
+.btn-adventure {
+  background: var(--primary-green);
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.btn-adventure:hover {
+  background: #65a30d;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(132, 204, 22, 0.3);
+}
+
+.card-adventure {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-adventure);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card-adventure:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation delays for floating elements */
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-3000 {
+  animation-delay: 3s;
+}
+
+/* Responsive utilities */
+@media (min-width: 480px) {
+  .xs\:inline {
+    display: inline;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .btn-adventure:hover {
+    transform: none;
+  }
+  
+  .card-adventure:hover {
+    transform: none;
+  }
+  
+  /* Increase touch targets on mobile */
+  button, a {
+    min-height: 44px;
+  }
+}
+
+/* Modal animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation-duration: 200ms;
+  animation-fill-mode: both;
+}
+
+.fade-in-0 {
+  animation-name: fade-in;
+}
+
+.zoom-in-95 {
+  animation-name: zoom-in;
+}
+
+.slide-in-from-bottom-4 {
+  animation-name: slide-in-from-bottom;
+}
+
+.duration-200 {
+  animation-duration: 200ms;
 }
