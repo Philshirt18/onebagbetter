@@ -8,9 +8,12 @@ import ActivityFeed from '@/components/ActivityFeed';
 import StatsDashboard from '@/components/StatsDashboard';
 import MilestoneAlert from '@/components/MilestoneAlert';
 import WelcomeBanner from '@/components/WelcomeBanner';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useTranslation } from '@/hooks/useTranslation';
 import { getGlobalStats } from '@/lib/api';
 
 export default function Home() {
+  const { t } = useTranslation();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [stats, setStats] = useState({
     totalCollected: 0,
@@ -107,6 +110,11 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      {/* Language Switcher - positioned in top-left */}
+      <div className="fixed top-6 left-6 z-50">
+        <LanguageSwitcher />
+      </div>
+      
       <HeroSection
         totalCollected={stats.totalCollected}
         totalEntries={stats.totalEntries}
@@ -120,10 +128,10 @@ export default function Home() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-display text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
-                IMPACT DASHBOARD
+                {t('mainPage.impactDashboard')}
               </h2>
               <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                See the collective impact we're making together in cleaning up our planet
+                {t('mainPage.impactDescription')}
               </p>
             </div>
             <StatsDashboard
@@ -173,7 +181,7 @@ export default function Home() {
           <div className="mb-4">
             <h3 className="text-display text-lg font-bold mb-2">One Bag Better</h3>
             <p className="text-gray-300 text-sm">
-              Small actions, big change—join the cleanup community.
+              {t('footer.tagline')}
             </p>
           </div>
           
@@ -182,19 +190,19 @@ export default function Home() {
               href="/privacy" 
               className="text-gray-300 hover:text-lime-400 transition-colors"
             >
-              Privacy Policy
+              {t('footer.privacyPolicy')}
             </a>
             <a 
               href="/terms" 
               className="text-gray-300 hover:text-lime-400 transition-colors"
             >
-              Terms & Conditions
+              {t('footer.termsConditions')}
             </a>
             <a 
               href="/legal" 
               className="text-gray-300 hover:text-lime-400 transition-colors"
             >
-              Legal Notice
+              {t('footer.legalNotice')}
             </a>
             <a 
               href="https://www.instagram.com/onebagbetter/" 
@@ -207,8 +215,8 @@ export default function Home() {
           </div>
           
           <div className="text-xs text-gray-400">
-            <p>We don't collect personal data or payments. We only collect rubbish.</p>
-            <p className="mt-1">© {new Date().getFullYear()} One Bag Better. Making the world cleaner, one bag at a time.</p>
+            <p>{t('footer.noDataCollection')}</p>
+            <p className="mt-1">{t('footer.copyright', { year: new Date().getFullYear() })}</p>
           </div>
         </div>
       </footer>

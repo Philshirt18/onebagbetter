@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 import WeightCounter from './WeightCounter';
 import AnimatedCounter from './AnimatedCounter';
 import MilestoneProgress from './MilestoneProgress';
@@ -18,6 +19,8 @@ export default function HeroSection({
   onAddCollection,
   loading = false,
 }: HeroSectionProps) {
+  const { t } = useTranslation();
+  
   return (
     <section className="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background overlay for better text readability */}
@@ -33,7 +36,7 @@ export default function HeroSection({
         
         {/* Subtitle */}
         <p className="text-xl md:text-2xl mb-8 text-gray-200 font-medium">
-          Small actions, big change—join the cleanup community.
+          {t('hero.subtitle')}
         </p>
 
         {/* Stats display */}
@@ -46,7 +49,7 @@ export default function HeroSection({
               className="mb-2"
             />
             <div className="text-gray-300 text-lg font-medium">
-              TOTAL COLLECTED
+              {t('hero.totalCollected')}
             </div>
           </div>
 
@@ -63,7 +66,7 @@ export default function HeroSection({
               />
             </div>
             <div className="text-gray-300 text-lg font-medium">
-              COLLECTION ENTRIES
+              {t('hero.collectionEntries')}
             </div>
           </div>
         </div>
@@ -90,13 +93,12 @@ export default function HeroSection({
             'shadow-lg hover:shadow-xl'
           )}
         >
-          ADD YOUR COLLECTION
+          {t('hero.addCollection')}
         </button>
 
         {/* Motivational text */}
         <p className="mt-8 text-gray-300 text-lg max-w-2xl mx-auto">
-          Every piece of trash collected makes a difference. 
-          Share your environmental impact and inspire others to join the movement.
+          {t('hero.motivationalText')}
         </p>
       </div>
 

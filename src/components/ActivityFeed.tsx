@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatAmount } from '@/lib/utils';
 import { getCollectionEntries } from '@/lib/api';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { CollectionEntryResponse } from '@/types';
 
 interface ActivityFeedProps {
@@ -17,6 +18,7 @@ export default function ActivityFeed({
   limit = 10,
   showPagination = true,
 }: ActivityFeedProps) {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState<CollectionEntryResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +40,7 @@ export default function ActivityFeed({
       setHasNext(response.pagination.hasNext);
       setHasPrev(response.pagination.hasPrev);
     } catch (err) {
-      setError('Failed to load activity feed');
+      setError(t('activity.error'));
       console.error('Activity feed error:', err);
     } finally {
       setLoading(false);
@@ -64,7 +66,7 @@ export default function ActivityFeed({
       <div className={cn('card-adventure p-6', className)}>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-lime-500"></div>
-          <span className="ml-3 text-gray-600">Loading activity...</span>
+          <span className="ml-3 text-gray-600">{t('activity.loading')}</span>
         </div>
       </div>
     );
@@ -80,7 +82,7 @@ export default function ActivityFeed({
             onClick={handleRefresh}
             className="btn-adventure px-4 py-2 text-sm"
           >
-            Try Again
+            {t('activity.tryAgain')}
           </button>
         </div>
       </div>
@@ -91,13 +93,13 @@ export default function ActivityFeed({
     return (
       <div className={cn('card-adventure p-6', className)}>
         <h2 className="text-display text-xl font-bold text-gray-800 mb-4">
-          RECENT ACTIVITY
+          {t('activity.title')}
         </h2>
         <div className="text-center py-12">
           <div className="text-gray-400 text-4xl mb-4">🌱</div>
-          <p className="text-gray-600 mb-2">No collections yet!</p>
+          <p className="text-gray-600 mb-2">{t('activity.noActivity')}</p>
           <p className="text-gray-500 text-sm">
-            Be the first to record a trash collection and start making a difference.
+            {t('activity.noActivityDescription')}
           </p>
         </div>
       </div>
@@ -108,13 +110,13 @@ export default function ActivityFeed({
     <div className={cn('card-adventure p-6', className)}>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-display text-xl font-bold text-gray-800">
-          RECENT ACTIVITY
+          {t('activity.title')}
         </h2>
         <button
           onClick={handleRefresh}
           disabled={loading}
           className="text-lime-600 hover:text-lime-700 transition-colors disabled:opacity-50"
-          title="Refresh activity"
+          title={t('activity.refresh')}
         >
           <svg
             className={cn('w-5 h-5', loading && 'animate-spin')}
@@ -149,10 +151,10 @@ export default function ActivityFeed({
                     <p className="font-medium text-gray-900 text-sm sm:text-base truncate">
                       {entry.name ? (
                         <>
-                          <span className="text-lime-600">{entry.name}</span> collected {formatAmount(entry.amount, entry.unit)}
+                          <span className="text-lime-600">{entry.name}</span> {t('activity.collected', { amount: formatAmount(entry.amount, entry.unit) })}
                         </>
                       ) : (
-                        <>Collected {formatAmount(entry.amount, entry.unit)}</>
+                        t('activity.collected', { amount: formatAmount(entry.amount, entry.unit) })
                       )}
                     </p>
                     {entry.location && (
@@ -174,8 +176,8 @@ export default function ActivityFeed({
             <div className="mt-3 pt-3 border-t border-gray-100">
               <p className="text-xs text-gray-500 flex items-center gap-1 flex-wrap">
                 <span>📱</span>
-                <span className="hidden sm:inline">Share your cleanup with</span>
-                <span className="sm:hidden">Share with</span>
+                <span className="hidden sm:inline">{t('activity.shareHint')}</span>
+                <span className="sm:hidden">{t('activity.shareHintShort')}</span>
                 <span className="font-mono text-lime-600 break-all">#onebagbetter</span>
               </p>
             </div>
@@ -187,7 +189,7 @@ export default function ActivityFeed({
       {showPagination && totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-200 gap-4 sm:gap-0">
           <div className="text-sm text-gray-600 order-2 sm:order-1">
-            Page {currentPage} of {totalPages}
+            {t('activity.pagination.page', { current: currentPage, total: totalPages })}
           </div>
           <div className="flex gap-2 order-1 sm:order-2">
             <button
@@ -195,14 +197,14 @@ export default function ActivityFeed({
               disabled={!hasPrev || loading}
               className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[80px]"
             >
-              Previous
+              {t('activity.pagination.previous')}
             </button>
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={!hasNext || loading}
               className="px-3 py-2 text-sm bg-lime-500 text-white rounded-lg hover:bg-lime-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-w-[80px]"
             >
-              Next
+              {t('activity.pagination.next')}
             </button>
           </div>
         </div>

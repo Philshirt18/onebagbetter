@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { getMilestoneProgress } from '@/lib/utils';
 import { formatDisplayAmount } from '@/lib/validations';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface MilestoneProgressProps {
   totalKg: number;
@@ -15,6 +16,7 @@ export default function MilestoneProgress({
   className,
   size = 'md',
 }: MilestoneProgressProps) {
+  const { t } = useTranslation();
   const { current, next, progress } = getMilestoneProgress(totalKg);
   
   if (!next) {
@@ -29,7 +31,7 @@ export default function MilestoneProgress({
             size === 'md' && 'text-base',
             size === 'lg' && 'text-lg'
           )}>
-            ALL MILESTONES ACHIEVED!
+            {t('milestones.allAchieved')}
           </span>
         </div>
         <p className={cn(
@@ -38,7 +40,7 @@ export default function MilestoneProgress({
           size === 'md' && 'text-sm',
           size === 'lg' && 'text-base'
         )}>
-          You're a true environmental champion! 🌍
+          {t('milestones.allAchievedDescription')}
         </p>
       </div>
     );
@@ -57,7 +59,7 @@ export default function MilestoneProgress({
           size === 'md' && 'text-sm',
           size === 'lg' && 'text-base'
         )}>
-          Next Milestone
+          {t('milestones.nextMilestone')}
         </span>
         <span className={cn(
           'font-bold',
@@ -90,7 +92,7 @@ export default function MilestoneProgress({
           size === 'md' && 'text-xs',
           size === 'lg' && 'text-sm'
         )}>
-          {progress.toFixed(1)}% complete
+          {progress.toFixed(1)}% {t('milestones.complete')}
         </span>
         <span className={cn(
           className?.includes('text-white') ? 'text-white/70' : 'text-gray-500',
@@ -98,7 +100,7 @@ export default function MilestoneProgress({
           size === 'md' && 'text-xs',
           size === 'lg' && 'text-sm'
         )}>
-          {remainingBags.toFixed(1)} bags to go
+          {remainingBags.toFixed(1)} {t('stats.bags')} {t('milestones.toGo')}
         </span>
       </div>
     </div>

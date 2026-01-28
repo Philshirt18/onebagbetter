@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface NavigationProps {
   currentPage?: 'home' | 'add' | 'community' | 'stats';
@@ -11,6 +12,7 @@ interface NavigationProps {
 export default function Navigation({ currentPage = 'home', onNavigate }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { t } = useTranslation();
 
   // Handle scroll effect for navigation background
   useEffect(() => {
@@ -35,10 +37,10 @@ export default function Navigation({ currentPage = 'home', onNavigate }: Navigat
   }, [isMenuOpen]);
 
   const navItems = [
-    { id: 'home', label: 'Home', icon: '🏠', active: currentPage === 'home' },
-    { id: 'add', label: 'Add Entry', icon: '➕', active: currentPage === 'add' },
-    { id: 'community', label: 'Community', icon: '👥', active: currentPage === 'community' },
-    { id: 'stats', label: 'Stats', icon: '📊', active: currentPage === 'stats' },
+    { id: 'home', label: t('navigation.home'), icon: '🏠', active: currentPage === 'home' },
+    { id: 'add', label: t('navigation.addEntry'), icon: '➕', active: currentPage === 'add' },
+    { id: 'community', label: t('navigation.community'), icon: '👥', active: currentPage === 'community' },
+    { id: 'stats', label: t('navigation.stats'), icon: '📊', active: currentPage === 'stats' },
   ];
 
   const handleNavClick = (pageId: string) => {
@@ -86,7 +88,7 @@ export default function Navigation({ currentPage = 'home', onNavigate }: Navigat
             isScrolled ? 'bg-white/98 shadow-lg' : 'bg-white/95',
             isMenuOpen ? 'bg-lime-50' : ''
           )}
-          aria-label="Toggle menu"
+          aria-label={t('navigation.toggleMenu')}
           aria-expanded={isMenuOpen}
         >
           <div className="w-6 h-6 flex flex-col justify-center items-center">

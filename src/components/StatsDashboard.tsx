@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { formatDisplayAmount } from '@/lib/validations';
 import { getMilestones, getNextMilestone } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 import AnimatedCounter from './AnimatedCounter';
 import MilestoneProgress from './MilestoneProgress';
 
@@ -19,6 +20,7 @@ export default function StatsDashboard({
   className,
 }: StatsDashboardProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsVisible(true);
@@ -35,28 +37,28 @@ export default function StatsDashboard({
 
   const stats = [
     {
-      label: 'Total Collected',
+      label: t('stats.totalCollected'),
       value: `${displayAmount.amount} ${displayAmount.unit}`,
       icon: '🗑️',
       color: 'lime',
       component: <div className="text-3xl font-bold text-lime-600">{displayAmount.amount} {displayAmount.unit}</div>,
     },
     {
-      label: 'Collection Entries',
+      label: t('stats.collectionEntries'),
       value: totalEntries,
       icon: '📊',
       color: 'blue',
       component: <AnimatedCounter value={totalEntries} className="text-3xl font-bold text-gray-800" />,
     },
     {
-      label: 'Milestones Achieved',
+      label: t('stats.milestonesAchieved'),
       value: achievedMilestones.length,
       icon: '🏆',
       color: 'yellow',
       component: <AnimatedCounter value={achievedMilestones.length} className="text-3xl font-bold text-gray-800" />,
     },
     {
-      label: 'Weight Equivalent',
+      label: t('stats.weightEquivalent'),
       value: `${(totalKg).toFixed(1)}kg`,
       icon: '⚖️',
       color: 'green',
@@ -66,22 +68,22 @@ export default function StatsDashboard({
 
   const impactStats = [
     {
-      label: 'Plastic Bottles Equivalent',
+      label: t('stats.plasticBottlesEquivalent'),
       value: `~${estimatedBottles.toLocaleString()}`,
       icon: '🍶',
-      description: 'Approximate plastic bottles prevented from polluting',
+      description: t('stats.plasticBottlesDescription'),
     },
     {
-      label: 'Garbage Trucks',
-      value: totalBags >= 330 ? `${Math.floor(totalBags / 330)} truck${Math.floor(totalBags / 330) > 1 ? 's' : ''}` : `${garbageTruckProgress} trucks`,
+      label: t('stats.garbageTrucks'),
+      value: totalBags >= 330 ? `${Math.floor(totalBags / 330)} ${Math.floor(totalBags / 330) > 1 ? t('stats.trucks') : t('stats.truck')}` : `${garbageTruckProgress} ${t('stats.trucks')}`,
       icon: '🚛',
-      description: 'Garbage truck capacity filled (10m³ ≈ 330 bags)',
+      description: t('stats.garbageTrucksDescription'),
     },
     {
-      label: 'Planet-Saving Actions',
+      label: t('stats.planetSavingActions'),
       value: `${totalEntries}`,
       icon: '🌍',
-      description: 'Each collection entry represents one action to save our planet',
+      description: t('stats.planetSavingDescription'),
     },
   ];
 
@@ -111,7 +113,7 @@ export default function StatsDashboard({
       {nextMilestone && (
         <div className="card-adventure p-4 sm:p-6">
           <h3 className="text-display text-lg font-bold text-gray-800 mb-4 text-center">
-            MILESTONE PROGRESS
+            {t('stats.milestoneProgress')}
           </h3>
           <MilestoneProgress totalKg={totalKg} size="lg" />
         </div>
@@ -121,7 +123,7 @@ export default function StatsDashboard({
       {achievedMilestones.length > 0 && (
         <div className="card-adventure p-4 sm:p-6">
           <h3 className="text-display text-lg font-bold text-gray-800 mb-4 text-center">
-            ACHIEVED MILESTONES
+            {t('stats.achievedMilestones')}
           </h3>
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             {achievedMilestones.map((milestone) => {
@@ -131,7 +133,7 @@ export default function StatsDashboard({
                   className="bg-lime-100 text-lime-800 px-3 py-2 rounded-full text-sm font-bold flex items-center gap-1"
                 >
                   <span>🏆</span>
-                  {milestone} bags
+                  {milestone} {t('stats.bags')}
                 </div>
               );
             })}
@@ -142,7 +144,7 @@ export default function StatsDashboard({
       {/* Environmental Impact */}
       <div className="card-adventure p-4 sm:p-6">
         <h3 className="text-display text-lg font-bold text-gray-800 mb-4 text-center">
-          ENVIRONMENTAL IMPACT
+          {t('stats.environmentalImpact')}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {impactStats.map((impact, index) => (
@@ -156,7 +158,7 @@ export default function StatsDashboard({
             >
               <div className="text-2xl mb-2">{impact.icon}</div>
               <div className="text-xl font-bold text-gray-800 mb-1">
-                {impact.label === 'Planet-Saving Actions' ? (
+                {impact.label === t('stats.planetSavingActions') ? (
                   <AnimatedCounter value={totalEntries} className="text-xl font-bold text-gray-800" />
                 ) : (
                   impact.value
@@ -173,10 +175,10 @@ export default function StatsDashboard({
       <div className="card-adventure p-4 sm:p-6 text-center bg-gradient-to-r from-lime-50 to-green-50 border-lime-200">
         <div className="text-4xl mb-3">🌍</div>
         <h3 className="text-display text-lg font-bold text-gray-800 mb-2">
-          KEEP THE MOMENTUM GOING!
+          {t('stats.keepMomentumGoing')}
         </h3>
         <p className="text-gray-600 mb-4 max-w-md mx-auto">
-          Every piece of trash collected makes our planet cleaner. Post your cleanup photos on Instagram with #onebagbetter and inspire others to join the movement!
+          {t('stats.keepMomentumDescription')}
         </p>
         <div className="flex flex-wrap justify-center gap-2 mb-4">
           <span className="bg-lime-100 text-lime-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -193,7 +195,7 @@ export default function StatsDashboard({
             className="inline-flex items-center gap-2 text-gray-600 hover:text-lime-600 transition-colors text-sm font-medium"
           >
             <img src="/instagram-icon.png" alt="Instagram" className="w-5 h-5" />
-            Follow @onebagbetter on Instagram
+            {t('stats.followInstagram')}
           </a>
         </div>
       </div>

@@ -1,155 +1,156 @@
+'use client';
+
+import { useTranslation } from '@/hooks/useTranslation';
+import { useI18n } from '@/contexts/I18nContext';
+import { translations } from '../../../translations';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+
 export default function PrivacyPage() {
+  const { t } = useTranslation();
+  const { language } = useI18n();
+  
+  // Access arrays directly from translations
+  const currentTranslations = translations[language];
+  
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
+      {/* Language Switcher - positioned in top-left */}
+      <div className="fixed top-6 left-6 z-50">
+        <LanguageSwitcher />
+      </div>
+      
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <h1 className="text-display text-3xl font-bold text-gray-800 mb-8 text-center">
-            Privacy Policy
+            {t('privacy.title')}
           </h1>
           
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-600 mb-6">
-              <strong>Last updated:</strong> {new Date().toLocaleDateString()}
+              <strong>{t('privacy.lastUpdated')}</strong> {new Date().toLocaleDateString()}
             </p>
 
             <div className="bg-lime-50 border border-lime-200 rounded-lg p-6 mb-8">
-              <h2 className="text-lg font-bold text-lime-800 mb-2">🌱 Our Privacy Promise</h2>
+              <h2 className="text-lg font-bold text-lime-800 mb-2">{t('privacy.promise.title')}</h2>
               <p className="text-lime-700">
-                <strong>We don't collect personal data or payments. We only collect rubbish—so together we can win time for what matters.</strong>
+                <strong>{t('privacy.promise.description')}</strong>
               </p>
             </div>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">1. Information We Collect</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.infoCollected.title')}</h2>
               <p className="text-gray-600 mb-4">
-                One Bag Better is designed with privacy in mind. We collect minimal, non-personal information:
+                {t('privacy.infoCollected.description')}
               </p>
               
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">What We DO Collect:</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">{t('privacy.infoCollected.doCollect')}</h3>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li><strong>Trash Collection Data:</strong> Amount collected (bags, kg, lbs)</li>
-                <li><strong>Optional Location:</strong> General location if you choose to share (e.g., "Berlin", "Central Park")</li>
-                <li><strong>Optional Name:</strong> First name or nickname if you want credit for your cleanup</li>
-                <li><strong>Timestamps:</strong> When collection entries are created</li>
-                <li><strong>Local Storage:</strong> Your welcome banner preference (stored in your browser only)</li>
+                {currentTranslations.privacy.infoCollected.doCollectItems.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
 
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">What We DON'T Collect:</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">{t('privacy.infoCollected.dontCollect')}</h3>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li>❌ Email addresses</li>
-                <li>❌ Phone numbers</li>
-                <li>❌ Payment information</li>
-                <li>❌ Personal identification documents</li>
-                <li>❌ Tracking cookies</li>
-                <li>❌ IP addresses for tracking</li>
-                <li>❌ Device fingerprinting</li>
-                <li>❌ Third-party analytics</li>
-                <li>❌ Advertising data</li>
+                {currentTranslations.privacy.infoCollected.dontCollectItems.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">2. How We Use Your Information</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.howWeUse.title')}</h2>
               <p className="text-gray-600 mb-4">
-                The minimal data we collect is used exclusively for:
+                {t('privacy.howWeUse.description')}
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li>Displaying community statistics (total bags collected, entries, etc.)</li>
-                <li>Showing recent community activity in the activity feed</li>
-                <li>Calculating environmental impact estimates (bottles saved, garbage trucks filled)</li>
-                <li>Providing milestone celebrations and progress tracking</li>
-                <li>Generating shareable social media content (only when you choose to share)</li>
+                {currentTranslations.privacy.howWeUse.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">3. Data Storage & Security</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.dataStorage.title')}</h2>
               <p className="text-gray-600 mb-4">
-                Your collection data is stored securely on our servers with the following protections:
+                {t('privacy.dataStorage.description')}
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li>Data is stored in a secure database with access controls</li>
-                <li>No personal identifiers are linked to collection entries</li>
-                <li>Data is used solely for community statistics and motivation</li>
-                <li>We do not create user profiles or track individual behavior</li>
-                <li>Local storage (browser-based) is used only for UI preferences</li>
+                {currentTranslations.privacy.dataStorage.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">4. Data Sharing</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.dataSharing.title')}</h2>
               <p className="text-gray-600 mb-4">
-                <strong>We do not share, sell, or distribute your data to third parties.</strong>
+                <strong>{t('privacy.dataSharing.noSharing')}</strong>
               </p>
               <p className="text-gray-600 mb-4">
-                The only "sharing" that occurs is:
+                {t('privacy.dataSharing.onlySharing')}
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li>Community statistics displayed publicly on the website (aggregated, anonymous)</li>
-                <li>Recent activity feed showing optional names/locations you chose to provide</li>
-                <li>Social media sharing features that YOU control and initiate</li>
+                {currentTranslations.privacy.dataSharing.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">5. Social Media Integration</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.socialMedia.title')}</h2>
               <p className="text-gray-600 mb-4">
-                Our platform includes optional social media features:
+                {t('privacy.socialMedia.description')}
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li>Share buttons generate text based on your collection entry</li>
-                <li>You control what gets posted to your social media accounts</li>
-                <li>We link to our Instagram account @onebagbetter for community building</li>
-                <li>No automatic posting or data sharing with social media platforms</li>
+                {currentTranslations.privacy.socialMedia.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">6. Cookies & Tracking</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.cookies.title')}</h2>
               <p className="text-gray-600 mb-4">
-                We use minimal browser storage:
+                {t('privacy.cookies.description')}
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li><strong>Local Storage:</strong> Remembers if you've seen the welcome banner</li>
-                <li><strong>No Tracking Cookies:</strong> We don't use cookies to track your behavior</li>
-                <li><strong>No Third-Party Analytics:</strong> No Google Analytics, Facebook Pixel, etc.</li>
-                <li><strong>No Advertising:</strong> No ad networks or marketing pixels</li>
+                {currentTranslations.privacy.cookies.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">7. Your Rights</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.rights.title')}</h2>
               <p className="text-gray-600 mb-4">
-                Since we collect minimal, non-personal data, your rights are straightforward:
+                {t('privacy.rights.description')}
               </p>
               <ul className="list-disc pl-6 text-gray-600 mb-4">
-                <li><strong>Transparency:</strong> This policy explains exactly what we collect</li>
-                <li><strong>Control:</strong> You choose what optional information to provide</li>
-                <li><strong>Access:</strong> Community data is visible to everyone on the platform</li>
-                <li><strong>No Account Required:</strong> Use the service without creating accounts</li>
+                {currentTranslations.privacy.rights.items.map((item: string, index: number) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">8. Children's Privacy</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.children.title')}</h2>
               <p className="text-gray-600 mb-4">
-                Our service is safe for all ages since we don't collect personal information. 
-                However, we recommend adult supervision for children participating in cleanup activities.
+                {t('privacy.children.description')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">9. Changes to This Policy</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.changes.title')}</h2>
               <p className="text-gray-600 mb-4">
-                We may update this privacy policy to reflect changes in our service. 
-                Any changes will be posted on this page with an updated date.
+                {t('privacy.changes.description')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">10. Contact Us</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">{t('privacy.contact.title')}</h2>
               <p className="text-gray-600 mb-4">
-                Questions about privacy? Reach out to us on Instagram 
+                {t('privacy.contact.description')} 
                 <a href="https://www.instagram.com/onebagbetter/" target="_blank" rel="noopener noreferrer" 
                    className="text-lime-600 hover:text-lime-700 font-medium">
                   @onebagbetter
@@ -163,7 +164,7 @@ export default function PrivacyPage() {
               href="/" 
               className="btn-adventure inline-block px-6 py-3 font-medium"
             >
-              Back to One Bag Better
+              {t('privacy.backButton')}
             </a>
           </div>
         </div>

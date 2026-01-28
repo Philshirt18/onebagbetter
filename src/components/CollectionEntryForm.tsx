@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { createCollectionEntry } from '@/lib/api';
 import { isValidAmount, isValidUnit, getErrorMessage } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { FormErrors } from '@/types';
 
 interface CollectionEntryFormProps {
@@ -17,6 +18,7 @@ export default function CollectionEntryForm({
   onCancel,
   className,
 }: CollectionEntryFormProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     amount: '',
     unit: 'bags' as 'bags' | 'kg' | 'lbs',
@@ -34,14 +36,14 @@ export default function CollectionEntryForm({
 
     // Validate amount
     if (!formData.amount.trim()) {
-      newErrors.amount = 'Amount is required';
+      newErrors.amount = t('form.validation.amountRequired');
     } else if (!isValidAmount(formData.amount)) {
-      newErrors.amount = 'Please enter a valid amount between 0.1 and 10,000';
+      newErrors.amount = t('form.validation.amountInvalid');
     }
 
     // Validate unit
     if (!isValidUnit(formData.unit)) {
-      newErrors.unit = 'Please select a valid unit';
+      newErrors.unit = t('form.validation.unitInvalid');
     }
 
     setErrors(newErrors);
@@ -123,7 +125,12 @@ export default function CollectionEntryForm({
     if (!lastEntry) return '';
     const location = lastEntry.location ? ` in ${lastEntry.location}` : '';
     const name = lastEntry.name ? ` by ${lastEntry.name}` : '';
-    return `Just collected ${lastEntry.amount} ${lastEntry.unit} of trash${location}${name}! 🌱 Join the movement to clean up our planet! #onebagbetter`;
+    return t('form.shareText', {
+      amount: lastEntry.amount,
+      unit: lastEntry.unit,
+      location,
+      name
+    });
   };
 
   const shareOnTwitter = () => {
@@ -140,7 +147,7 @@ export default function CollectionEntryForm({
       navigator.clipboard.writeText(text).then(() => {
         // Open Instagram profile in new tab
         window.open('https://www.instagram.com/onebagbetter/', '_blank');
-        alert('Caption copied to clipboard! Post your cleanup photo on Instagram with #onebagbetter and paste the caption.');
+        alert(t('form.success.shareTitle') + ' ' + t('form.success.hashtag'));
       }).catch(() => {
         // Fallback for older browsers
         const textArea = document.createElement('textarea');
@@ -150,7 +157,7 @@ export default function CollectionEntryForm({
         document.execCommand('copy');
         document.body.removeChild(textArea);
         window.open('https://www.instagram.com/onebagbetter/', '_blank');
-        alert('Caption copied to clipboard! Post your cleanup photo on Instagram with #onebagbetter and paste the caption.');
+        alert(t('form.success.shareTitle') + ' ' + t('form.success.hashtag'));
       });
     } else {
       // Just open Instagram if clipboard not available
@@ -168,7 +175,7 @@ export default function CollectionEntryForm({
   return (
     <div className={cn('card-adventure p-4 sm:p-6 max-w-md mx-auto', className)}>
       <h2 className="text-display text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">
-        ADD YOUR COLLECTION
+        {t('form.title')}
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -178,39 +185,39 @@ export default function CollectionEntryForm({
             <div className="flex items-center">
               <div className="text-lime-600 text-lg sm:text-xl mr-3">🌱</div>
               <div>
-                <p className="text-lime-800 font-medium text-sm sm:text-base">Great job!</p>
-                <p className="text-lime-700 text-xs sm:text-sm">Your trash collection has been recorded.</p>
+                <p className="text-lime-800 font-medium text-sm sm:text-base">{t('form.success.title')}</p>
+                <p className="text-lime-700 text-xs sm:text-sm">{t('form.success.description')}</p>
               </div>
             </div>
             
             {/* Social Sharing Section */}
             <div className="border-t border-lime-200 pt-3 sm:pt-4">
               <p className="text-lime-800 font-medium text-xs sm:text-sm mb-3">
-                📸 Share your cleanup photos on Instagram with #onebagbetter!
+                {t('form.success.shareTitle')}
               </p>
               <div className="flex gap-2 flex-wrap">
                 <button
                   onClick={shareOnTwitter}
                   className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-blue-500 text-white text-xs sm:text-sm rounded-lg hover:bg-blue-600 transition-colors"
                 >
-                  🐦 <span className="hidden xs:inline">Twitter</span>
+                  🐦 <span className="hidden xs:inline">{t('form.success.twitter')}</span>
                 </button>
                 <button
                   onClick={shareOnInstagram}
                   className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs sm:text-sm rounded-lg hover:from-purple-600 hover:to-pink-600 transition-colors"
                 >
                   <img src="/instagram-icon.png" alt="Instagram" className="w-4 h-4" />
-                  <span className="hidden xs:inline">Instagram</span>
+                  <span className="hidden xs:inline">{t('form.success.instagram')}</span>
                 </button>
                 <button
                   onClick={shareOnFacebook}
                   className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-blue-600 text-white text-xs sm:text-sm rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  📘 <span className="hidden xs:inline">Facebook</span>
+                  📘 <span className="hidden xs:inline">{t('form.success.facebook')}</span>
                 </button>
               </div>
               <p className="text-lime-600 text-xs mt-2">
-                Use hashtag: <span className="font-mono font-bold break-all">#onebagbetter</span>
+                {t('form.success.hashtag')}
               </p>
             </div>
           </div>
@@ -226,7 +233,7 @@ export default function CollectionEntryForm({
         {/* Amount Input */}
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
-            Amount Collected *
+            {t('form.labels.amount')}
           </label>
           <div className="relative">
             <input
@@ -234,7 +241,7 @@ export default function CollectionEntryForm({
               type="text"
               value={formData.amount}
               onChange={handleAmountChange}
-              placeholder="Enter amount"
+              placeholder={t('form.placeholders.amount')}
               className={cn(
                 'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500 transition-colors text-gray-900 placeholder-gray-500',
                 errors.amount
@@ -252,7 +259,7 @@ export default function CollectionEntryForm({
         {/* Unit Selector */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Unit *
+            {t('form.labels.unit')}
           </label>
           <div className="flex gap-2 sm:gap-3">
             <button
@@ -266,8 +273,8 @@ export default function CollectionEntryForm({
               )}
               disabled={isSubmitting}
             >
-              <span className="sm:hidden">Bags</span>
-              <span className="hidden sm:inline">Trash Bags</span>
+              <span className="sm:hidden">{t('form.units.bagsShort')}</span>
+              <span className="hidden sm:inline">{t('form.units.bags')}</span>
             </button>
             <button
               type="button"
@@ -280,8 +287,8 @@ export default function CollectionEntryForm({
               )}
               disabled={isSubmitting}
             >
-              <span className="sm:hidden">kg</span>
-              <span className="hidden sm:inline">Kilograms</span>
+              <span className="sm:hidden">{t('form.units.kgShort')}</span>
+              <span className="hidden sm:inline">{t('form.units.kg')}</span>
             </button>
             <button
               type="button"
@@ -294,55 +301,55 @@ export default function CollectionEntryForm({
               )}
               disabled={isSubmitting}
             >
-              <span className="sm:hidden">lbs</span>
-              <span className="hidden sm:inline">Pounds</span>
+              <span className="sm:hidden">{t('form.units.lbsShort')}</span>
+              <span className="hidden sm:inline">{t('form.units.lbs')}</span>
             </button>
           </div>
           {errors.unit && (
             <p className="mt-1 text-sm text-red-600">{errors.unit}</p>
           )}
           <p className="mt-1 text-xs text-gray-500">
-            💡 Rule of thumb: 1 bag (30L) ≈ 1kg of plastic packaging
+            {t('form.tips.ruleOfThumb')}
           </p>
         </div>
 
         {/* Name Input */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Your Name (Optional)
+            {t('form.labels.name')}
           </label>
           <input
             id="name"
             type="text"
             value={formData.name}
             onChange={handleNameChange}
-            placeholder="Enter your name"
+            placeholder={t('form.placeholders.name')}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500 transition-colors bg-white hover:border-gray-400 text-gray-900 placeholder-gray-500"
             disabled={isSubmitting}
             maxLength={100}
           />
           <p className="mt-1 text-xs text-gray-500">
-            👤 Add your name to get credit for your cleanup efforts
+            {t('form.tips.nameCredit')}
           </p>
         </div>
 
         {/* Location Input */}
         <div>
           <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-            Location (Optional)
+            {t('form.labels.location')}
           </label>
           <input
             id="location"
             type="text"
             value={formData.location}
             onChange={handleLocationChange}
-            placeholder="Where did you collect trash?"
+            placeholder={t('form.placeholders.location')}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-lime-500 transition-colors bg-white hover:border-gray-400 text-gray-900 placeholder-gray-500"
             disabled={isSubmitting}
             maxLength={255}
           />
           <p className="mt-1 text-xs text-gray-500">
-            💡 Add location to share more details on social media
+            {t('form.tips.locationShare')}
           </p>
         </div>
 
@@ -355,7 +362,7 @@ export default function CollectionEntryForm({
               disabled={isSubmitting}
               className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed order-2 sm:order-1"
             >
-              Cancel
+              {t('form.buttons.cancel')}
             </button>
           )}
           <button
@@ -366,15 +373,15 @@ export default function CollectionEntryForm({
               isSubmitting && 'animate-pulse'
             )}
           >
-            {isSubmitting ? 'Recording...' : 'Record Collection'}
+            {isSubmitting ? t('form.buttons.submitting') : t('form.buttons.submit')}
           </button>
         </div>
       </form>
 
       {/* Helper Text */}
       <p className="mt-4 text-xs text-gray-500 text-center leading-relaxed">
-        Every piece of trash collected makes a difference! 🌱<br/>
-        <span className="text-lime-600 font-medium">Post your cleanup photos on Instagram with #onebagbetter</span>
+        {t('form.helperText')}<br/>
+        <span className="text-lime-600 font-medium">{t('form.helperTextInstagram')}</span>
       </p>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { getMilestones, getNextMilestone, getMilestoneProgress } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface MilestoneAlertProps {
   totalKg: number;
@@ -17,6 +18,7 @@ export default function MilestoneAlert({
   onClose,
   className,
 }: MilestoneAlertProps) {
+  const { t } = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
   const [achievedMilestone, setAchievedMilestone] = useState<number | null>(null);
 
@@ -54,8 +56,8 @@ export default function MilestoneAlert({
 
   const getMilestoneMessage = (milestone: number) => {
     return {
-      title: `🎉 ${milestone} BAGS MILESTONE!`,
-      message: `Amazing! You've contributed to collecting ${milestone} bags of trash. Every bag makes our planet cleaner!`,
+      title: t('alerts.milestoneTitle', { milestone }),
+      message: t('alerts.milestoneMessage', { milestone }),
       emoji: '🗑️',
     };
   };
@@ -87,25 +89,25 @@ export default function MilestoneAlert({
                 onClick={handleClose}
                 className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"
               >
-                Awesome!
+                {t('alerts.awesome')}
               </button>
               <button
                 onClick={() => {
                   // Share milestone achievement
-                  const shareText = `🎉 Just reached the ${achievedMilestone} bags milestone in trash collection! Join the movement to clean up our planet! #onebagbetter`;
+                  const shareText = t('alerts.shareText', { milestone: achievedMilestone });
                   const url = encodeURIComponent(window.location.origin);
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${url}`, '_blank');
                 }}
                 className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
               >
-                🐦 Share
+                {t('alerts.share')}
               </button>
             </div>
           </div>
           <button
             onClick={handleClose}
             className="text-white/70 hover:text-white transition-colors ml-2"
-            aria-label="Close milestone alert"
+            aria-label={t('alerts.close')}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
